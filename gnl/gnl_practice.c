@@ -60,7 +60,7 @@ char    *get_next_line(int fd)
     static char     *mem[OPEN_MAX + 1];
 
     //리턴값 초기화
-    ret = NULL;
+
     //fd openmax buffersize 에외처리
     
     //메모리에 아무것도 들어있지않다면 빈내용 추가
