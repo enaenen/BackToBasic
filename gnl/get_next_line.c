@@ -61,21 +61,13 @@ char    *get_next_line(int fd)
     int status;
 
     ret = NULL;
-    //fd openmax buffersize 에외처리
     if (fd < 0 || OPEN_MAX < fd || BUFFER_SIZE <= 0)
         return (NULL);
-    //메모리에 아무것도 들어있지않다면 빈내용 추가
     if (!mem[fd])
          mem[fd] = gnl_strndup("", 0);
-    //버퍼에 버퍼사이즈+1 만큼 할당
     buf = malloc((size_t)BUFFER_SIZE + 1);
-    //버퍼와 메모리의 메모리할당 예외처리
     if (!mem[fd] || !buf)
         return (NULL);
-    //파일 읽기
     status = read_fd(fd, &ret, &buf, &mem[fd]);
-    //버퍼 내용 해제
-    //읽어온 상태값에 대한 예외처리
-    //return
     return (ret);
 }
