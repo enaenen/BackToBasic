@@ -12,7 +12,7 @@
 #  define OPEN_MAX 256
 # endif
 
-# define F_ERROR -1
+# define ERROR -1
 # define END_OF_FILE 0
 # define SUCCESS 1
 
