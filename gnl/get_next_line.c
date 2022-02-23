@@ -7,7 +7,7 @@ static int get_one_line(char *ptr, char **ret,char **mem)
     if (ptr)
     {
         *ret = gnl_strndup(*mem, ptr - *mem + 1);
-        *tmp = gnl_strndup(ptr + 1, gnl_strlen(ptr + 1));
+        tmp = gnl_strndup(ptr + 1, gnl_strlen(ptr + 1));
         if (!ret || !tmp)
             return (ERROR);
         free (*mem);
@@ -16,7 +16,7 @@ static int get_one_line(char *ptr, char **ret,char **mem)
     }
     else
     {
-        if (!*mem || !**mem)
+        if (*mem && **mem == '\0')
         {
             *ret = NULL;
             free(*mem);
@@ -33,6 +33,7 @@ static int read_fd(int fd, char **ret, char **buf, char **mem)
     char *ptr;
     char *tmp;
     ssize_t read_len;
+
     while(1)
     {
         ptr = gnl_strchr(*mem, '\n');
@@ -50,7 +51,7 @@ static int read_fd(int fd, char **ret, char **buf, char **mem)
         free(*mem);
         *mem = tmp;
     }
-    return get_one_line(&ptr, &ret, &mem);
+    return get_one_line(ptr, ret, mem);
 }
 
 char    *get_next_line(int fd)
@@ -60,7 +61,6 @@ char    *get_next_line(int fd)
     static char *mem[OPEN_MAX + 1];
     int status;
 
-    ret = NULL;
     if (fd < 0 || OPEN_MAX < fd || BUFFER_SIZE <= 0)
         return (NULL);
     if (!mem[fd])
@@ -68,6 +68,13 @@ char    *get_next_line(int fd)
     buf = malloc((size_t)BUFFER_SIZE + 1);
     if (!mem[fd] || !buf)
         return (NULL);
+    ret = NULL;
     status = read_fd(fd, &ret, &buf, &mem[fd]);
+    free(buf);
+    if (status == ERROR || status == END_OF_FILE)
+    {
+        free(mem[fd]);
+        mem[fd] = NULL;
+    }
     return (ret);
 }

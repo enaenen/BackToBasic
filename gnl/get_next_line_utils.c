@@ -33,7 +33,7 @@ char    *gnl_strndup(const char *s, size_t n)
     tmp = ret;
     while (n--)
         *tmp++ = *s++;
-    tmp = '\0';
+    *tmp = '\0';
     return (ret);
 }
 

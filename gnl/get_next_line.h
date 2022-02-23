@@ -16,6 +16,7 @@
 # define END_OF_FILE 0
 # define SUCCESS 1
 
+char    *get_next_line(int fd);
 size_t  gnl_strlen(const char *);
 char    *gnl_strndup(const char *, size_t);
 char    *gnl_strchr(const char *, int);
